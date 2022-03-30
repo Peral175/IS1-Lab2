@@ -28,4 +28,18 @@ def dfs(visited,graph, node, target):
 
 # dfs([], star_galactica, "Ajan Kloss", "Naboo")
 
+def bfs(visited, graph, node):
+    print(visualize_tree())
+    visited.append(node)
+    queue.append(node)
+    while queue:
+        s = queue.pop(0)
+        print("bfs",s)
+        if s == target:
+            print("Found: ",s)
+            break
+        for neighbour in graph[s]:
+            if neighbour not in visited:
+                visited.append(neighbour)
+                queue.append(neighbour)
 
