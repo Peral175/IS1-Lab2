@@ -25,17 +25,25 @@ def dfs(visited,graph, node, target):
         for neighbour in graph[node]:
             dfs(visited, graph, neighbour, target)
 
-
+visited = []
 def ucs(graph, origin, target):
-  list_of_next_node = []
+  list_of_next_node = [(0, origin)]
+  visited.append(origin)
   if origin == target:
     quit()
+  counter = 1
   while True:
-    for neighbour in graph[origin]:
-      list_of_next_node.append(neighbour[weight])
-    break
-    print(list_of_next_node)
-
+    counter += 1
+    list_of_next_node = sorted(list_of_next_node)
+    s = list_of_next_node[0]
+    list_of_next_node.pop(0)
+    print(graph[s[1]])
+    for neighbour in graph[s[1]]:
+      list_of_next_node.append((graph[s[1]][neighbour], neighbour))
+    s = sorted(list_of_next_node)
+    print(s)
+    if counter == 4:
+      break
 
 ucs(star_galactica, 'Ajan Kloss', "whatever")
 # def bfs(visited, graph, node):
