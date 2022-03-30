@@ -26,20 +26,30 @@ def dfs(visited,graph, node, target):
             dfs(visited, graph, neighbour, target)
 
 
-# dfs([], star_galactica, "Ajan Kloss", "Naboo")
+def ucs(graph, origin, target):
+  list_of_next_node = []
+  if origin == target:
+    quit()
+  while True:
+    for neighbour in graph[origin]:
+      list_of_next_node.append(neighbour[weight])
+    break
+    print(list_of_next_node)
 
-def bfs(visited, graph, node):
-    print(visualize_tree())
-    visited.append(node)
-    queue.append(node)
-    while queue:
-        s = queue.pop(0)
-        print("bfs",s)
-        if s == target:
-            print("Found: ",s)
-            break
-        for neighbour in graph[s]:
-            if neighbour not in visited:
-                visited.append(neighbour)
-                queue.append(neighbour)
+
+ucs(star_galactica, 'Ajan Kloss', "whatever")
+# def bfs(visited, graph, node):
+#     print(visualize_tree())
+#     visited.append(node)
+#     queue.append(node)
+#     while queue:
+#         s = queue.pop(0)
+#         print("bfs",s)
+#         if s == target:
+#             print("Found: ",s)
+#             break
+#         for neighbour in graph[s]:
+#             if neighbour not in visited:
+#                 visited.append(neighbour)
+#                 queue.append(neighbour)
 
