@@ -13,39 +13,42 @@ star_galactica = { "Ajan Kloss": {"Bahu": 15, "Bothawui": 11, "Bespin and Hoth":
                    "Naboo": {}
                    }
 
-# target = ["Sullust", "Cantanica"]
-def dfs(visited,graph, node, target):
+
+def dfs(visited, graph, origin, target, found):
+    global temp_found
+    temp_found = found
     visited = set()
-    if node in target:
-      print(target, "Found")
-      quit()
-    if node not in visited:
-        print ("->", node)
-        visited.add(node)
-        for neighbour in graph[node]:
-            dfs(visited, graph, neighbour, target)
+    if temp_found:
+        return None
+    if origin not in visited:
+        print ("->", origin)
+        visited.add(origin)
+        if origin in target:
+          print(target, "Found")
+          temp_found = True
+        for neighbour in graph[origin]:
+            dfs(visited, graph, neighbour, target, temp_found)
 
-visited = []
-def ucs(graph, origin, target):
-  list_of_next_node = [(0, origin)]
-  visited.append(origin)
-  if origin == target:
-    quit()
-  counter = 1
-  while True:
-    counter += 1
-    list_of_next_node = sorted(list_of_next_node)
-    s = list_of_next_node[0]
-    list_of_next_node.pop(0)
-    print(graph[s[1]])
-    for neighbour in graph[s[1]]:
-      list_of_next_node.append((graph[s[1]][neighbour], neighbour))
-    s = sorted(list_of_next_node)
-    print(s)
-    if counter == 4:
-      break
+# def ucs(graph, origin, target):
+#   list_of_next_node = [(0, origin)]
+#   visited.append(origin)
+#   if origin == target:
+#     quit()
+#   counter = 1
+#   while True:
+#     counter += 1
+#     list_of_next_node = sorted(list_of_next_node)
+#     s = list_of_next_node[0]
+#     list_of_next_node.pop(0)
+#     print(graph[s[1]])
+#     for neighbour in graph[s[1]]:
+#       list_of_next_node.append((graph[s[1]][neighbour], neighbour))
+#     s = sorted(list_of_next_node)
+#     print(s)
+#     if counter == 4:
+#       break
 
-ucs(star_galactica, 'Ajan Kloss', "whatever")
+# ucs(star_galactica, 'Ajan Kloss', "whatever")
 # def bfs(visited, graph, node):
 #     print(visualize_tree())
 #     visited.append(node)
@@ -61,3 +64,45 @@ ucs(star_galactica, 'Ajan Kloss', "whatever")
 #                 visited.append(neighbour)
 #                 queue.append(neighbour)
 
+def best_path_calculator(graph, src):
+  queue = [src]
+  minDistances = {v: float("inf") for v in graph}
+  minDistances[src] = 0
+  predecessor = {}
+
+  while queue:
+    currentNode = queue.pop(0)
+    for neighbor in graph[currentNode]:
+      newDist = minDistances[currentNode] + graph[currentNode][neighbor]
+      if newDist < minDistances[neighbor]:
+        minDistances[neighbor] = min(newDist, minDistances[neighbor])
+        queue.append(neighbor)
+        predecessor[neighbor] = currentNode
+
+  return minDistances, predecessor
+
+def uniform_cost_search(graph, origin, dest):
+  minDistances, predecessor = best_path_calculator(graph, origin)
+  path = []
+  currentNode = dest
+  while currentNode != origin:
+    if currentNode not in predecessor:
+      print("Path not reachable")
+      break
+    else:
+      path.insert(0, currentNode)
+      currentNode = predecessor[currentNode]
+  path.insert(0, origin)
+
+  if dest in minDistances and minDistances[dest] != float("inf"):
+    print('Found: ' + dest, ",in the shortest path of " + str(minDistances[dest]),
+          "and the path is ", str(path))
+  else:
+    print("No possible path to that planet")
+
+# ///////////////////////////////////////////////// Execution Area /////////////////////////////////////////////
+
+found = False
+visited = set()
+dfs(visited, star_galactica, 'Ajan Kloss', "Sullust", False)
+uniform_cost_search(star_galactica, 'Ajan Kloss', "Sullust")
