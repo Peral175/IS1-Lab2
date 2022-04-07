@@ -147,7 +147,7 @@ def main():
   # ucs(heuristic_table, 'Ajan Kloss', "Sullust")
   # uniform_cost_search(heuristic_table, 'Ajan Kloss', "Sullust")
   greedy()
-  # a_star()
+  a_star()
 
 if __name__ == '__main__':
   main()
