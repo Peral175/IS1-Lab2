@@ -4,10 +4,10 @@ The internal dictionary contains the children of the outer vertex, as well as th
 Vertices: edge={child node: distance} 
 '''
 star_galactica = { "Ajan Kloss": {"Batuu": 23, "Bothawui": 17, "Bespin and Hoth": 30},
-                   "Batuu": {"Ach-To" : 9, "Endor and Kef Bir": 6},
+                   "Batuu": {"Ahch-To" : 9, "Endor and Kef Bir": 6},
                    "Bothawui": {"Cantanica": 18, "Kessel": 8},
                    "Bespin and Hoth": {"Crait": 8, "D'Qar": 9},
-                   "Ach-To": {"Cantanica": 33},
+                   "Ahch-To": {"Cantanica": 33},
                    "Endor and Kef Bir": {"Sullust": 15, "Ring of Kafrene": 8},
                    "D'Qar": {"Sullust": 3, "Naboo": 3},
                    "Cantanica": {},
@@ -20,19 +20,27 @@ star_galactica = { "Ajan Kloss": {"Batuu": 23, "Bothawui": 17, "Bespin and Hoth"
 '''
 ToDo
 '''
-heuristic_table = { "Ajan Kloss": {"Batuu": 15, "Bothawui": 11, "Bespin and Hoth": 20},
-                   "Batuu": {"Ach-To" : 5, "Endor and Kef Bir": 3},
-                   "Bothawui": {"Cantanica": 15, "Kessel": 4},
-                   "Bespin and Hoth": {"Crait": 5, "D'Qar": 6},
-                   "Ach-To": {"Cantanica": 15},
-                   "Endor and Kef Bir": {"Sullust": 8, "Ring of Kafrene": 5},
-                   "D'Qar": {"Sullust": 2, "Naboo": 2},
-                  #  "Cantanica": {},
-                  #  "Sullust": {},
-                  #  "Ring of Kafrene": {},
-                  #  "Kessel": {},
-                  #  "Crait": {},
-                  #  "Naboo": {}
+heuristic_table = { 
+                  #  "Ajan Kloss": {"Batuu": 15, "Bothawui": 11, "Bespin and Hoth": 20},
+                  #  "Batuu": {"Ahch-To" : 5, "Endor and Kef Bir": 3},
+                  #  "Bothawui": {"Cantanica": 15, "Kessel": 4},
+                  #  "Bespin and Hoth": {"Crait": 5, "D'Qar": 6},
+                  #  "Ahch-To": {"Cantanica": 15},
+                  #  "Endor and Kef Bir": {"Sullust": 8, "Ring of Kafrene": 5},
+                  #  "D'Qar": {"Sullust": 2, "Naboo": 2},
+                   "Ajan Kloss": {"Sullust":20},
+                   "Batuu": {"Sullust":10},
+                   "Bothawui": {"Sullust":7},
+                   "Bespin and Hoth": {"Sullust":2},
+                   "Ahch-To": {"Sullust":12},
+                   "Endor and Kef Bir": {"Sullust":6},
+                   "Cantanica": {"Sullust":21},
+                   "Kessel": {"Sullust":14},
+                   "Crait": {"Sullust":1},
+                   "D'Qar": {"Sullust":3},
+                   "Ring of Kafrene": {"Sullust",5},
+                   "Naboo": {"Sullust":4},
+                   "Sullust": {"Sullust":0}
                    }
 
 def dfs(list_of_visited_nodes, graph, current_node, target):
@@ -123,8 +131,35 @@ def ucs(list_of_visited_nodes, graph, root, target):
 #   else:
 #     print("No possible path to that planet")
 
-def greedy():
-  pass
+def greedy(list_of_visited_nodes, graph, root, target, heuristics):
+  '''
+  Desc:
+    Greedy Search algorithm:
+      -> algorithm always expands the lowest available node.
+  Parameters:
+    list_of_visited_nodes: list = empty list to keep track of nodes expanded during algorithm execution
+    graph: {node:{child_node: weight}} = tree structure composed of a nested algorithm (vertices, edges, weights)
+    root: string = root node of the graph
+    target: string = node that we are trying to find in the tree structure
+    heuristics: ToDo ----------------------------------------------------------
+  Return value:
+    list_of_visited_nodes: list = explained above
+  '''
+  current_node = root                               # root is first node
+  sorted_list = [(heuristics[current_node][target], current_node)]# initialize sorted list with root node and heuristic to target
+  while current_node != target:
+    try:
+      prev_weight, current_node = sorted_list.pop(0)# we visited node -> it can be removed from the sorted list
+    except IndexError:                              # Exception -> list is empty
+      return "Target {} has not been found in the graph!".format(target)
+    list_of_visited_nodes.append(current_node)      # add it to list of visited nodes
+    for neighbour in graph[current_node]:           # parse children of current node
+      sorted_list.append((heuristics[neighbour][target], neighbour)) # add child nodes to list with heuristic value respective to target
+    sorted_list = sorted(sorted_list)               # sort list according to lowest heuristic value
+    print("Heuristics: {} -- node: {}".format(sorted_list,current_node))
+  print("Target {target} has been found!".format(target=current_node))
+  return list_of_visited_nodes                      # return the path of visited nodes
+  
 
 def a_star():
   pass
@@ -146,7 +181,9 @@ def main():
 
   # ucs(heuristic_table, 'Ajan Kloss', "Sullust")
   # uniform_cost_search(heuristic_table, 'Ajan Kloss', "Sullust")
-  greedy()
+  list_of_visited_nodes = list()
+  greedy_solution = greedy(list_of_visited_nodes, star_galactica, ROOT_NODE, TARGET_NODE, heuristic_table)
+  print("Greedy Search: ", greedy_solution)
   a_star()
 
 if __name__ == '__main__':
