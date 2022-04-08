@@ -38,7 +38,7 @@ heuristic_table = {
                    "Kessel": {"Sullust":14},
                    "Crait": {"Sullust":1},
                    "D'Qar": {"Sullust":3},
-                   "Ring of Kafrene": {"Sullust",5},
+                   "Ring of Kafrene": {"Sullust":5},
                    "Naboo": {"Sullust":4},
                    "Sullust": {"Sullust":0}
                    }
@@ -161,8 +161,36 @@ def greedy(list_of_visited_nodes, graph, root, target, heuristics):
   return list_of_visited_nodes                      # return the path of visited nodes
   
 
-def a_star():
-  pass
+def a_star(list_of_visited_nodes, graph, root, target, heuristics):
+  '''
+  Desc:
+    A* Search algorithm:
+      -> ToDo ----------------------------------------------------------------
+  Parameters:
+    list_of_visited_nodes: list = empty list to keep track of nodes expanded during algorithm execution
+    graph: {node:{child_node: weight}} = tree structure composed of a nested algorithm (vertices, edges, weights)
+    root: string = root node of the graph
+    target: string = node that we are trying to find in the tree structure
+    heuristics: ToDo ----------------------------------------------------------
+  Return value:
+    list_of_visited_nodes: list = explained above
+  '''
+  current_node = root
+  g = 0
+  h = heuristic_table[current_node][target]
+  sorted_list = [(g,h,current_node)]
+  while current_node != target:
+    try:
+      g,h,current_node = sorted_list.pop(0)
+    except IndexError:                              # Exception -> list is empty
+      return "Target {} has not been found in the graph!".format(target)
+    list_of_visited_nodes.append(current_node)      # add it to list of visited nodes
+    for neighbour in graph[current_node]:           # parse children of current node
+      sorted_list.append((graph[current_node][neighbour] + g,heuristics[neighbour][target],neighbour))
+    sorted_list = sorted(sorted_list,key=lambda array: array[0]+array[1]) # lambda takes sum of g and h
+    print("{} -- {}".format(sorted_list,current_node))
+  print("Target {target} has been found!".format(target=current_node))
+  return list_of_visited_nodes                      # return the path of visited nodes
 
 def main():
   '''///////////////////////////////////////// Execution Area ////////////////////////////////////////////'''
@@ -179,12 +207,14 @@ def main():
   ucs_solution = ucs(list_of_visited_nodes, star_galactica, ROOT_NODE, TARGET_NODE)
   print("Uniform Cost Search: ", ucs_solution)
 
-  # ucs(heuristic_table, 'Ajan Kloss', "Sullust")
-  # uniform_cost_search(heuristic_table, 'Ajan Kloss', "Sullust")
   list_of_visited_nodes = list()
   greedy_solution = greedy(list_of_visited_nodes, star_galactica, ROOT_NODE, TARGET_NODE, heuristic_table)
   print("Greedy Search: ", greedy_solution)
-  a_star()
+ 
+  list_of_visited_nodes = list()
+  a_star_solution = a_star(list_of_visited_nodes, star_galactica, ROOT_NODE, TARGET_NODE, heuristic_table)
+  print("A* Search: ", a_star_solution)
+ 
 
 if __name__ == '__main__':
   main()
