@@ -156,7 +156,7 @@ def greedy(list_of_visited_nodes, graph, root, target, heuristics):
     for neighbour in graph[current_node]:           # parse children of current node
       sorted_list.append((heuristics[neighbour][target], neighbour)) # add child nodes to list with heuristic value respective to target
     sorted_list = sorted(sorted_list)               # sort list according to lowest heuristic value
-    print("Heuristics: {} -- node: {}".format(sorted_list,current_node))
+    print("Node: {} \t-- heuritstics: {}".format(current_node, sorted_list))
   print("Target {target} has been found!".format(target=current_node))
   return list_of_visited_nodes                      # return the path of visited nodes
   
@@ -178,17 +178,17 @@ def a_star(list_of_visited_nodes, graph, root, target, heuristics):
   current_node = root
   g = 0
   h = heuristic_table[current_node][target]
-  sorted_list = [(g,h,current_node)]
+  sorted_list = [(h,g,current_node)]
   while current_node != target:
     try:
-      g,h,current_node = sorted_list.pop(0)
+      h,g,current_node = sorted_list.pop(0)
     except IndexError:                              # Exception -> list is empty
       return "Target {} has not been found in the graph!".format(target)
     list_of_visited_nodes.append(current_node)      # add it to list of visited nodes
     for neighbour in graph[current_node]:           # parse children of current node
-      sorted_list.append((graph[current_node][neighbour] + g,heuristics[neighbour][target],neighbour))
-    sorted_list = sorted(sorted_list,key=lambda array: array[0]+array[1]) # lambda takes sum of g and h
-    print("{} -- {}".format(sorted_list,current_node))
+      sorted_list.append((heuristics[neighbour][target],graph[current_node][neighbour] + g,neighbour))
+    sorted_list = sorted(sorted_list,key=lambda array: array[0]+array[1],reverse=True) # lambda takes sum of g and h
+    print("Node: {}\n-- heuristics: {}\n".format(current_node,sorted_list))
   print("Target {target} has been found!".format(target=current_node))
   return list_of_visited_nodes                      # return the path of visited nodes
 
@@ -203,14 +203,20 @@ def main():
   dfs_solution = dfs(list_of_visited_nodes, star_galactica, ROOT_NODE, TARGET_NODE)
   print("Depth First Search: ",dfs_solution)
   
+  input()
+
   list_of_visited_nodes = list()
   ucs_solution = ucs(list_of_visited_nodes, star_galactica, ROOT_NODE, TARGET_NODE)
   print("Uniform Cost Search: ", ucs_solution)
+
+  input()
 
   list_of_visited_nodes = list()
   greedy_solution = greedy(list_of_visited_nodes, star_galactica, ROOT_NODE, TARGET_NODE, heuristic_table)
   print("Greedy Search: ", greedy_solution)
  
+  input()
+
   list_of_visited_nodes = list()
   a_star_solution = a_star(list_of_visited_nodes, star_galactica, ROOT_NODE, TARGET_NODE, heuristic_table)
   print("A* Search: ", a_star_solution)
