@@ -21,13 +21,6 @@ star_galactica = { "Ajan Kloss": {"Batuu": 23, "Bothawui": 17, "Bespin and Hoth"
 ToDo
 '''
 heuristic_table = { 
-                  #  "Ajan Kloss": {"Batuu": 15, "Bothawui": 11, "Bespin and Hoth": 20},
-                  #  "Batuu": {"Ahch-To" : 5, "Endor and Kef Bir": 3},
-                  #  "Bothawui": {"Cantanica": 15, "Kessel": 4},
-                  #  "Bespin and Hoth": {"Crait": 5, "D'Qar": 6},
-                  #  "Ahch-To": {"Cantanica": 15},
-                  #  "Endor and Kef Bir": {"Sullust": 8, "Ring of Kafrene": 5},
-                  #  "D'Qar": {"Sullust": 2, "Naboo": 2},
                    "Ajan Kloss": {"Sullust":20},
                    "Batuu": {"Sullust":10},
                    "Bothawui": {"Sullust":7},
@@ -94,43 +87,6 @@ def ucs(list_of_visited_nodes, graph, root, target):
   print("Target {target} has been found!".format(target=current_node))
   return list_of_visited_nodes                      # return the path of visited nodes
   
-# def best_path_calculator(graph, src):
-#   queue = [src]
-#   minDistances = {v: float("inf") for v in graph}
-#   minDistances[src] = 0
-#   predecessor = {}
-#   while queue:
-#     print("A",minDistances, predecessor)
-#     currentNode = queue.pop(0)
-#     for neighbor in graph[currentNode]:
-#       newDist = minDistances[currentNode] + graph[currentNode][neighbor]
-#       if newDist < minDistances[neighbor]:
-#         minDistances[neighbor] = min(newDist, minDistances[neighbor])
-#         queue.append(neighbor)
-#         predecessor[neighbor] = currentNode
-#   return minDistances, predecessor
-
-# def uniform_cost_search(graph, origin, dest):
-#   minDistances, predecessor = best_path_calculator(graph, origin)
-#   path = []
-#   currentNode = dest
-#   print("B",minDistances, predecessor)
-#   print("Current node: ", currentNode)
-#   while currentNode != origin:
-#     if currentNode not in predecessor:
-#       print("Path not reachable")
-#       break
-#     else:
-#       path.insert(0, currentNode)
-#       currentNode = predecessor[currentNode]
-#       print("Curr",currentNode)
-#   path.insert(0, origin)
-#   if dest in minDistances and minDistances[dest] != float("inf"):
-#     print('Found: ' + dest, ",in the shortest path of " + str(minDistances[dest]),
-#           "and the path is ", str(path))
-#   else:
-#     print("No possible path to that planet")
-
 def greedy(list_of_visited_nodes, graph, root, target, heuristics):
   '''
   Desc:
@@ -187,7 +143,7 @@ def a_star(list_of_visited_nodes, graph, root, target, heuristics):
     list_of_visited_nodes.append(current_node)      # add it to list of visited nodes
     for neighbour in graph[current_node]:           # parse children of current node
       sorted_list.append((heuristics[neighbour][target],graph[current_node][neighbour] + g,neighbour))
-    sorted_list = sorted(sorted_list,key=lambda array: array[0]+array[1],reverse=True) # lambda takes sum of g and h
+    sorted_list = sorted(sorted_list,key=lambda array: array[0]+array[1]) # lambda takes sum of g and h
     print("Node: {}\n-- heuristics: {}\n".format(current_node,sorted_list))
   print("Target {target} has been found!".format(target=current_node))
   return list_of_visited_nodes                      # return the path of visited nodes
