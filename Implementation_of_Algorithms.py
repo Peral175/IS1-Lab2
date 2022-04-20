@@ -18,7 +18,7 @@ star_galactica = { "Ajan Kloss": {"Batuu": 23, "Bothawui": 17, "Bespin and Hoth"
                    "Naboo": {}
                    }
 '''
-ToDo
+Heuristic values for Sullust.
 '''
 heuristic_table = { 
                    "Ajan Kloss": {"Sullust":20},
@@ -121,13 +121,13 @@ def a_star(list_of_visited_nodes, graph, root, target, heuristics):
   '''
   Desc:
     A* Search algorithm:
-      -> ToDo ----------------------------------------------------------------
+      Combines weight with heuristic values
   Parameters:
     list_of_visited_nodes: list = empty list to keep track of nodes expanded during algorithm execution
     graph: {node:{child_node: weight}} = tree structure composed of a nested algorithm (vertices, edges, weights)
     root: string = root node of the graph
     target: string = node that we are trying to find in the tree structure
-    heuristics: ToDo ----------------------------------------------------------
+    heuristics: heuristic values (to Sullust for our examples)
   Return value:
     list_of_visited_nodes: list = explained above
   '''
